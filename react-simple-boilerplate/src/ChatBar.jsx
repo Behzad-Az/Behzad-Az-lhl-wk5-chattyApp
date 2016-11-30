@@ -3,29 +3,36 @@ import React, {Component} from 'react';
 class ChatBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {currMessage: ""};
+    this.state = {currUsername: "", currMessage: ""};
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleMsgChange = this.handleMsgChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.addMsgFcn(this.props.username, this.state.currMessage);
+    this.props.addMsgFcn(this.state.currUsername, this.state.currMessage);
     this.setState({currMessage: ""});
   }
 
-  handleChange(event) {
+  handleMsgChange(event) {
     event.preventDefault();
     this.setState({currMessage: event.target.value});
+  }
+
+  handleNameChange(event) {
+    event.preventDefault();
+    this.setState({currUsername: event.target.value});
   }
 
   render() {
     console.log("componentDidMount <ChatBar />");
     return (
       <footer>
-        <input id="username" type="text" placeholder="Your Name (Optional)" value={this.props.username} />
         <form onSubmit={this.handleSubmit}>
-          <input id="new-message" type="text" value={this.state.currMessage} placeholder="Type a message and hit ENTER" onChange={this.handleChange} />
+          <input id="username" type="text" placeholder="Your Name (Optional)" onChange={this.handleNameChange} />
+          <input id="new-message" type="text" value={this.state.currMessage} placeholder="Type a message and hit ENTER" onChange={this.handleMsgChange} />
+          <input id="hidden-submit-btn" type="submit" />
         </form>
       </footer>
     );
