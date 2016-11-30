@@ -9,9 +9,8 @@ class MessageList extends Component {
         {
           this.props.messageArr.map((message, index) => {
             return (
-              <div key={message.id} style={message.bgColor}>
+
                 <Message key={message.id} message={message} />
-              </div>
             );
           })
         }

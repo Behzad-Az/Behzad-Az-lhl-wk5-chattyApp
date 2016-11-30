@@ -4,16 +4,27 @@ class ChatBar extends Component {
   constructor(props) {
     super(props);
     this.state = {currUsername: "", currMessage: ""};
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
     this.handleMsgChange = this.handleMsgChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.addMsgFcn(this.state.currUsername, this.state.currMessage);
-    this.setState({currMessage: ""});
+  componentDidMount() {
+      document.addEventListener('keypress', function (event) {
+      var key = event.which || event.keyCode;
+      if (key === 13) {
+        this.props.addMsgFcn(this.state.currUsername, this.state.currMessage);
+        this.setState({currMessage: ""});
+      }
+    }.bind(this));
+
   }
+
+  // handleSubmit(event) {
+  //   event.preventDefault();
+  //   this.props.addMsgFcn(this.state.currUsername, this.state.currMessage);
+  //   this.setState({currMessage: ""});
+  // }
 
   handleMsgChange(event) {
     event.preventDefault();
@@ -29,13 +40,19 @@ class ChatBar extends Component {
     console.log("componentDidMount <ChatBar />");
     return (
       <footer>
-        <form onSubmit={this.handleSubmit}>
-          <input id="username" type="text" placeholder="Your Name (Optional)" onChange={this.handleNameChange} />
-          <input id="new-message" type="text" value={this.state.currMessage} placeholder="Type a message and hit ENTER" onChange={this.handleMsgChange} />
-          <input id="hidden-submit-btn" type="submit" />
-        </form>
+
+        <input id="username" type="text" placeholder="Your Name (Optional)" onChange={this.handleNameChange} />
+        <input id="new-message" type="text" value={this.state.currMessage} placeholder="Type a message and hit ENTER" onChange={this.handleMsgChange} />
+
       </footer>
     );
   }
 }
 export default ChatBar;
+
+
+  // <form onSubmit={this.handleSubmit}>
+  //   <input id="username" type="text" placeholder="Your Name (Optional)" onChange={this.handleNameChange} />
+  //   <input id="new-message" type="text" value={this.state.currMessage} placeholder="Type a message and hit ENTER" onChange={this.handleMsgChange} />
+  //   <input id="hidden-submit-btn" type="submit" />
+  // </form>
