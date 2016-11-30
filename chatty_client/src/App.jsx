@@ -13,18 +13,18 @@ let data = {
   userCount: 2,
   socket: new WebSocket("ws://localhost:4000"),
   messages: [
-    {
-      id: 0,
-      username: "Bob",
-      content: "Has anyone seen my marbles?",
-      fontColor: {color: colorArr[0 % colorArr.length]}
-    },
-    {
-      id: 1,
-      username: "Anonymous",
-      content: "No, I think you lost the. You lost your marbles Bob. You lost them for good.",
-      fontColor: {color: colorArr[1 % colorArr.length]}
-    }
+    // {
+    //   id: 0,
+    //   username: "Bob",
+    //   content: "Has anyone seen my marbles?",
+    //   fontColor: {color: colorArr[0 % colorArr.length]}
+    // },
+    // {
+    //   id: 1,
+    //   username: "Anonymous",
+    //   content: "No, I think you lost the. You lost your marbles Bob. You lost them for good.",
+    //   fontColor: {color: colorArr[1 % colorArr.length]}
+    // }
   ],
   notification: ""
 };
@@ -80,7 +80,6 @@ class App extends Component {
 
   addMessage(username, content) {
 
-
     console.log("Adding message....");
     if (!content) {
       this.setState({notification: "Please enter a message first"});
@@ -88,24 +87,14 @@ class App extends Component {
     }
 
     else {
-      let existingUser = false;
-      let colorIndex = this.state.userCount % colorArr.length;
-      username = username || "Anonymous";
 
-      this.state.messages.forEach((msg) => {
-        if (msg.username === username) {
-          existingUser = true;
-          colorIndex = colorArr.indexOf(msg.fontColor.color);
-        }
-      });
-
-      if (!existingUser) { this.state.userCount += 1; }
+      // if (!existingUser) { this.state.userCount += 1; }
 
       const newMessage = {
         id: this.state.messages.length,
         username: username,
-        content: content,
-        fontColor: {color: colorArr[colorIndex]}
+        content: content
+        // fontColor: {color: colorArr[colorIndex]}
       };
 
       this.state.socket.send(JSON.stringify(newMessage));
