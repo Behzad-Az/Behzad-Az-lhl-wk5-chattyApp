@@ -2,22 +2,30 @@ import React, {Component} from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
-var data = {
+const colorArr = ["#00C8F8", "#FFC33C", "#59C4C5", "#FBE2B4", "#EF9950",
+                  "#78D64B", "#F2C14E", "#F78154", "#4D9078", "#B4436C"];
+
+let data = {
   // currentUser: {name: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
+  userCount: 2,
   messages: [
     {
       id: 0,
       username: "Bob",
       content: "Has anyone seen my marbles?",
+      bgColor: {backgroundColor: colorArr[0 % colorArr.length]}
     },
     {
       id: 1,
       username: "Anonymous",
-      content: "No, I think you lost the. You lost your marbles Bob. You lost them for good."
+      content: "No, I think you lost the. You lost your marbles Bob. You lost them for good.",
+      bgColor: {backgroundColor: colorArr[1 % colorArr.length]}
     }
   ],
   notification: ""
 };
+
+
 
 class App extends Component {
 
@@ -25,7 +33,6 @@ class App extends Component {
     super(props);
     //this.state = Object.assign(data, {currentUser: {name: this.props.username || "Anynomous"}});
     this.state = data;
-    console.log(this.state.currentUser);
     this.addMessage = this.addMessage.bind(this);
   }
 
@@ -50,17 +57,27 @@ class App extends Component {
     }
 
     else {
+      let existingUser = false;
+      let colorIndex = this.state.userCount % colorArr.length;
       username = username || "Anynomous";
+      this.state.messages.forEach((msg) => {
+        if (msg.username === username) {
+          existingUser = true;
+          colorIndex = colorArr.indexOf(msg.bgColor.backgroundColor);
+        }
+      });
+
+      if (!existingUser) { this.state.userCount += 1; }
+
       const newMessage = {
         id: this.state.messages.length,
         username: username,
-        content: content
+        content: content,
+        bgColor: {backgroundColor: colorArr[colorIndex]}
       };
       const messages = this.state.messages.concat(newMessage);
       this.setState({messages: messages});
-
     }
-
   }
 
   render() {
@@ -68,7 +85,7 @@ class App extends Component {
       <div>
         <nav id="chattyNavBar">
           <div className="app-notifications">{this.state.notification}</div>
-          <h1>Chatt</h1>
+          <h1>Chatty</h1>
         </nav>
         <div className="wrapper">
           <MessageList messageArr={this.state.messages}/>

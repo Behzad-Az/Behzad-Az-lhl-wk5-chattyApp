@@ -8,7 +8,11 @@ class MessageList extends Component {
       <div id="message-list">
         {
           this.props.messageArr.map((message, index) => {
-            return <Message key={message.id} message={message}/>
+            return (
+              <div key={message.id} style={message.bgColor}>
+                <Message key={message.id} message={message} />
+              </div>
+            );
           })
         }
         <div className="message system">

@@ -12,6 +12,16 @@ nav h1 { margin: 0; color: white;}
 }
 #message-list { height: calc(100vh - 131px); padding: 16px 8px;}
 #message-list .message { padding: 4px 0;  display: flex;}
+
+#message-list .message00C8F8 { padding: 4px 0;  display: flex; background-color: #00C8F8}
+
+//const colorArr = ["#00C8F8", "#FFC33C", "#59C4C5", "#FBE2B4", "#EF9950"];
+
+
+
+
+
+
 #message-list .message .username,#message-list .message .content {
   display: inline-block; padding: 4px 0;
 }
@@ -33,3 +43,5 @@ footer input {
 footer #username { flex: 3; }
 footer #new-message { flex: 7; }
 footer #hidden-submit-btn { display: none; }
+
+
