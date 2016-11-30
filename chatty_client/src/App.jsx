@@ -60,6 +60,7 @@ class App extends Component {
       let existingUser = false;
       let colorIndex = this.state.userCount % colorArr.length;
       username = username || "Anynomous";
+
       this.state.messages.forEach((msg) => {
         if (msg.username === username) {
           existingUser = true;
