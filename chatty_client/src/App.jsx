@@ -63,12 +63,6 @@ class App extends Component {
           throw new Error("Unknown event type " + parsedMsg.type);
       }
 
-
-
-
-
-
-
       // if (parsedMsg.type === "new message") {
       //   const messages = this.state.messages.concat(parsedMsg.message);
       //   this.setState({
