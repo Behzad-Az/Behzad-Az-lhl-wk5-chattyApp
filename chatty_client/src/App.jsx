@@ -11,7 +11,6 @@ let data = {
   onlineUsers: ""
 };
 
-
 class App extends Component {
 
   constructor(props) {
@@ -62,24 +61,6 @@ class App extends Component {
         default:
           throw new Error("Unknown event type " + parsedMsg.type);
       }
-
-      // if (parsedMsg.type === "new message") {
-      //   const messages = this.state.messages.concat(parsedMsg.message);
-      //   this.setState({
-      //     messages: messages,
-      //     systemNotification: parsedMsg.systemNotification,
-      //     currentUser: parsedMsg.username
-      //   });
-
-      // } else if (parsedMsg.type === "user change") {
-      //   this.setState({
-      //     systemNotification: parsedMsg.systemNotification,
-      //     currentUser: parsedMsg.username
-      //   });
-
-      // } else if (parsedMsg.type === "update online users") {
-      //   this.setState({onlineUsers: parsedMsg.systemNotification});
-      // }
     }
   }
 
@@ -113,9 +94,8 @@ class App extends Component {
     return (
       <div>
         <nav id="chattyNavBar">
-          <div className="app-navBarNotifications">{this.state.navBarNotification}</div>
           <h1>Chatty</h1>
-          <script>{this.scrollDown}</script>
+          <div className="app-navBarNotifications">{this.state.navBarNotification}</div>
           <p>{this.state.onlineUsers}</p>
         </nav>
         <div className="wrapper">
