@@ -1,48 +1,120 @@
-h1 {
-  color: tomato;
-}
+h1 { color: tomato; }
 
 html, body { max-height: 100vh; max-width: 100vw; font-family: 'Open Sans', sans-serif;}
 .wrapper { font-size: 14px; }
 
-
-
-nav { height: 40px; padding: 8px; border-bottom: 1px solid black; background-color: tomato; }
-nav h1 { margin: 0; color: white; display: inline-block; }
-nav p { line-height: 10px; float: right; display: block; margin-top: 30px; }
-.app-navBarNotifications {
-  background-color: red; float: right; color:white; border-radius: 6px;
-  padding:0 10px; line-height: 30px; display: block; margin: 0;
+nav {
+  height: 40px;
+  padding: 8px;
+  border-bottom: 1px solid black;
+  background-color: tomato;
+  h1 {
+    margin: 0;
+    color: white;
+    display: inline-block;
+  }
+  p {
+    line-height: 10px;
+    float: right;
+    display: block;
+    margin-top: 30px;
+  }
+  .app-navBarNotifications {
+    background-color:
+    red; float: right;
+    color:white;
+    border-radius: 6px;
+    padding:0 10px;
+    line-height: 30px;
+    display: block;
+    margin: 0;
+  }
 }
 
-#message-list { height: calc(100vh - 131px); padding: 16px 8px; overflow: auto;}
-#message-list .message { padding: 4px 0;  display: flex;}
+#message-list {
+  height: calc(100vh - 131px);
+  padding: 16px 8px;
+  overflow: auto;
 
-#message-list .message00C8F8 { padding: 4px 0;  display: flex; background-color: #00C8F8}
+  .content p {
+    margin: 0 0 0px 0;
+  }
 
-#message-list .message .username,#message-list .message .content {
-  display: inline-block; padding: 4px 0;
+  .message {
+    padding: 4px 0;
+    display: flex;
+
+    .username {
+      width: 15%;
+      margin-right: 16px;
+      overflow: hidden;
+      font-weight: 700;
+      display: inline-block;
+      padding: 4px 0;
+    }
+
+    .content {
+      width: 85%;
+      word-wrap: break-word;
+      display: inline-block;
+      padding: 4px 0;
+    }
+
+    .picture {
+      width: 60%;
+    }
+
+    .system {
+      font-weight: 400;
+      font-style: italic;
+    }
+  }
 }
 
-#message-list .message .picture { width: 60%; height: 60%;}
-#message-list .content p { margin: 0 0 10px 0;}
-#message-list .message .username { width: 15%; margin-right: 16px; overflow: hidden; font-weight: 700;}
-#message-list .message .content { width: 85%; word-wrap: break-word; }
-#message-list .message.system { font-weight: 400; font-style: italic; }
 footer {
   height: 41px;
   border-top: 1px solid black;
   background-color: tomato;
   display: flex; align-items: center;
+
+  input {
+    border: 1px solid black;
+    margin: 4px;
+    height: 20px;
+    padding: 4px 8px;
+  }
+
+  #username { flex: 3; }
+  #new-message { flex: 7; }
 }
-footer input {
-  border: 1px solid black;
-  margin: 4px;
-  height: 20px;
-  padding: 4px 8px;
-}
-footer #username { flex: 3; }
-footer #new-message { flex: 7; }
-footer #hidden-submit-btn { display: none; }
+
+
+// nav h1 { margin: 0; color: white; display: inline-block; }
+// nav p { line-height: 10px; float: right; display: block; margin-top: 30px; }
+// .app-navBarNotifications {
+//   background-color: red; float: right; color:white; border-radius: 6px;
+//   padding:0 10px; line-height: 30px; display: block; margin: 0;
+// }
+
+// #message-list .message { padding: 4px 0;  display: flex;}
+
+// #message-list .message .username, #message-list .message .content {
+//   display: inline-block; padding: 4px 0;
+// }
+
+// #message-list .message .picture { width: 60%; height: 60%;}
+// #message-list .content p { margin: 0 0 10px 0;}
+// #message-list .message .username { width: 15%; margin-right: 16px; overflow: hidden; font-weight: 700;}
+// #message-list .message .content { width: 85%; word-wrap: break-word; }
+// #message-list .message .system { font-weight: 400; font-style: italic; }
+
+// footer input {
+//   border: 1px solid black;
+//   margin: 4px;
+//   height: 20px;
+//   padding: 4px 8px;
+// // }
+// footer #username { flex: 3; }
+// footer #new-message { flex: 7; }
 
 
