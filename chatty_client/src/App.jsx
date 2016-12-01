@@ -10,7 +10,6 @@ const colorArr = ["FF1053", "#F9C80E", "#F86624", "#43BCCD", "#662E9B",
 //"#00C8F8", "#FFC33C", "#EF9950", "#FBE2B4", "#59C4C5"
 let data = {
   currentUser: {name: "Anonymous"},
-  userCount: 2,
   socket: new WebSocket("ws://localhost:4000"),
   messages: [
     // {
@@ -51,11 +50,10 @@ class App extends Component {
 
       if (parsedMsg.type === "new message") {
         const messages = this.state.messages.concat(parsedMsg);
+        console.log(parsedMsg);
         this.setState({messages: messages});
 
       } else if (parsedMsg.type === "user change") {
-        // let systemNotification = `${this.state.currentUser.name} ${parsedMsg.content}`;
-        // this.setState({systemNotification: systemNotification, currentUser: {name: parsedMsg.username || "Anonymous"}});
         this.setState({
           systemNotification: parsedMsg.content,
           currentUser: parsedMsg.username

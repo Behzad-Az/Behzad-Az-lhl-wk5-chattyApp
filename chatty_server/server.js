@@ -22,6 +22,8 @@ const colorArr = ["FF1053", "#F9C80E", "#F86624", "#43BCCD", "#662E9B",
 let messageArr = [];
 let userCount = 0;
 
+// function sendToClient(ws, id, )
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
@@ -33,10 +35,12 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (incomingMsg, socket) => {
     let parsedMsg = JSON.parse(incomingMsg);
+    let prevUser = ws.username || "Anonymous";
 
     if (parsedMsg.type === "new message") {
       let existingUser = false;
       let colorIndex = userCount % colorArr.length;
+      ws.username = ws.username || "Anonymous";
       parsedMsg.username = parsedMsg.username || "Anonymous";
 
       messageArr.forEach((msg) => {
@@ -47,17 +51,21 @@ wss.on('connection', (ws) => {
       });
 
       if (!existingUser) { userCount++; }
-
       parsedMsg.fontColor = { color: colorArr[colorIndex] };
-
       messageArr.push(parsedMsg);
+
+      if (parsedMsg.username !== ws.username && parsedMsg.username !== "Anonymous") {
+        parsedMsg.newUserMsg = `${ws.username} change name to ${parsedMsg.username}...`;
+        ws.username = parsedMsg.username;
+      } else {
+        parsedMsg.newUserMsg = "";
+      }
 
       wss.clients.forEach((client) => {
         client.send(JSON.stringify(parsedMsg));
       });
 
     } else if (parsedMsg.type === "user change") {
-      let prevUser = ws.username || "Anonymous";
       let msgToClient = `${prevUser} change name to ${parsedMsg.username}...`;
       ws.username = parsedMsg.username;
       let outObj = {
