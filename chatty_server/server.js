@@ -22,7 +22,17 @@ const colorArr = ["FF1053", "#F9C80E", "#F86624", "#43BCCD", "#662E9B",
 let messageArr = [];
 let userCount = 0;
 
-// function sendToClient(ws, id, )
+function sendToClient(wss, type, sysNotif, newMessage, username) {
+  let outObj = {
+    type: type,
+    systemNotification: sysNotif,
+    message: newMessage,
+    username: {name: username}
+  };
+  wss.clients.forEach((client) => {
+    client.send(JSON.stringify(outObj));
+  });
+}
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -36,6 +46,7 @@ wss.on('connection', (ws) => {
   ws.on('message', (incomingMsg, socket) => {
     let parsedMsg = JSON.parse(incomingMsg);
     let prevUser = ws.username || "Anonymous";
+    let newUserNotif = "";
 
     if (parsedMsg.type === "new message") {
       let existingUser = false;
@@ -52,30 +63,20 @@ wss.on('connection', (ws) => {
 
       if (!existingUser) { userCount++; }
       parsedMsg.fontColor = { color: colorArr[colorIndex] };
+      parsedMsg.id = messageArr.length;
       messageArr.push(parsedMsg);
 
       if (parsedMsg.username !== ws.username && parsedMsg.username !== "Anonymous") {
-        parsedMsg.newUserMsg = `${ws.username} change name to ${parsedMsg.username}...`;
+        newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
         ws.username = parsedMsg.username;
-      } else {
-        parsedMsg.newUserMsg = "";
       }
-
-      wss.clients.forEach((client) => {
-        client.send(JSON.stringify(parsedMsg));
-      });
+      sendToClient(wss, "new message", newUserNotif, parsedMsg, ws.username);
 
     } else if (parsedMsg.type === "user change") {
-      let msgToClient = `${prevUser} change name to ${parsedMsg.username}...`;
+      ws.username = ws.username || "Anonymous";
+      newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
       ws.username = parsedMsg.username;
-      let outObj = {
-          type: parsedMsg.type,
-          content: msgToClient,
-          username: {name: ws.username}
-        };
-      wss.clients.forEach((client) => {
-        client.send(JSON.stringify(outObj));
-      });
+      sendToClient(wss, "user change", newUserNotif, "", ws.username)
     }
 
   });
