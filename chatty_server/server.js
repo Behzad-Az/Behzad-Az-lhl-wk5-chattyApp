@@ -50,52 +50,74 @@ wss.on('connection', (ws) => {
     let prevUser = ws.username || "Anonymous";
     let newUserNotif = "";
 
+    switch(parsedMsg.type) {
 
-    // switch(data.type) {
-    //   case "incomingMessage":
-    //     // handle incoming message
-    //     break;
-    //   case "incomingNotification":
-    //     // handle incoming notification
-    //     break;
-    //   default:
-    //     // show an error in the console if the message type is unknown
-    //     throw new Error("Unknown event type " + data.type);
-    // }
+      case "new message":
+        let existingUser = false;
+        let colorIndex = userCount % colorArr.length;
+        ws.username = ws.username || "Anonymous";
+        parsedMsg.username = parsedMsg.username || "Anonymous";
 
+        messageArr.forEach((msg) => {
+          if (msg.username === parsedMsg.username) {
+            existingUser = true;
+            colorIndex = colorArr.indexOf(msg.fontColor.color);
+          }
+        });
 
+        if (!existingUser) { userCount++; }
+        parsedMsg.fontColor = { color: colorArr[colorIndex] };
+        parsedMsg.id = messageArr.length;
+        messageArr.push(parsedMsg);
 
-
-    if (parsedMsg.type === "new message") {
-      let existingUser = false;
-      let colorIndex = userCount % colorArr.length;
-      ws.username = ws.username || "Anonymous";
-      parsedMsg.username = parsedMsg.username || "Anonymous";
-
-      messageArr.forEach((msg) => {
-        if (msg.username === parsedMsg.username) {
-          existingUser = true;
-          colorIndex = colorArr.indexOf(msg.fontColor.color);
+        if (parsedMsg.username !== ws.username && parsedMsg.username !== "Anonymous") {
+          newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
+          ws.username = parsedMsg.username;
         }
-      });
+        sendToClient(wss, "new message", newUserNotif, parsedMsg, ws.username);
+        break;
 
-      if (!existingUser) { userCount++; }
-      parsedMsg.fontColor = { color: colorArr[colorIndex] };
-      parsedMsg.id = messageArr.length;
-      messageArr.push(parsedMsg);
-
-      if (parsedMsg.username !== ws.username && parsedMsg.username !== "Anonymous") {
+      case "user change":
+        ws.username = ws.username || "Anonymous";
         newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
         ws.username = parsedMsg.username;
-      }
-      sendToClient(wss, "new message", newUserNotif, parsedMsg, ws.username);
+        sendToClient(wss, "user change", newUserNotif, "", ws.username);
+        break;
 
-    } else if (parsedMsg.type === "user change") {
-      ws.username = ws.username || "Anonymous";
-      newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
-      ws.username = parsedMsg.username;
-      sendToClient(wss, "user change", newUserNotif, "", ws.username)
+      default:
+        throw new Error("Unknown event type " + parsedMsg.type);
     }
+
+    // if (parsedMsg.type === "new message") {
+    //   let existingUser = false;
+    //   let colorIndex = userCount % colorArr.length;
+    //   ws.username = ws.username || "Anonymous";
+    //   parsedMsg.username = parsedMsg.username || "Anonymous";
+
+    //   messageArr.forEach((msg) => {
+    //     if (msg.username === parsedMsg.username) {
+    //       existingUser = true;
+    //       colorIndex = colorArr.indexOf(msg.fontColor.color);
+    //     }
+    //   });
+
+    //   if (!existingUser) { userCount++; }
+    //   parsedMsg.fontColor = { color: colorArr[colorIndex] };
+    //   parsedMsg.id = messageArr.length;
+    //   messageArr.push(parsedMsg);
+
+    //   if (parsedMsg.username !== ws.username && parsedMsg.username !== "Anonymous") {
+    //     newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
+    //     ws.username = parsedMsg.username;
+    //   }
+    //   sendToClient(wss, "new message", newUserNotif, parsedMsg, ws.username);
+
+    // } else if (parsedMsg.type === "user change") {
+    //   ws.username = ws.username || "Anonymous";
+    //   newUserNotif = `${ws.username} change name to ${parsedMsg.username}...`;
+    //   ws.username = parsedMsg.username;
+    //   sendToClient(wss, "user change", newUserNotif, "", ws.username);
+    // }
 
   });
 });

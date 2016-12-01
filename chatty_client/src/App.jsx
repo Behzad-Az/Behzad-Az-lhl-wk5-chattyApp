@@ -35,23 +35,57 @@ class App extends Component {
     this.state.socket.onmessage = (event) => {
       let parsedMsg = JSON.parse(event.data);
 
-      if (parsedMsg.type === "new message") {
-        const messages = this.state.messages.concat(parsedMsg.message);
-        this.setState({
-          messages: messages,
-          systemNotification: parsedMsg.systemNotification,
-          currentUser: parsedMsg.username
-        });
 
-      } else if (parsedMsg.type === "user change") {
-        this.setState({
-          systemNotification: parsedMsg.systemNotification,
-          currentUser: parsedMsg.username
-        });
 
-      } else if (parsedMsg.type === "update online users") {
-        this.setState({onlineUsers: parsedMsg.systemNotification});
+      switch(parsedMsg.type) {
+
+        case "new message":
+          const messages = this.state.messages.concat(parsedMsg.message);
+          this.setState({
+            messages: messages,
+            systemNotification: parsedMsg.systemNotification,
+            currentUser: parsedMsg.username
+          });
+          break;
+
+        case "user change":
+          this.setState({
+            systemNotification: parsedMsg.systemNotification,
+            currentUser: parsedMsg.username
+          });
+          break;
+
+        case "update online users":
+          this.setState({onlineUsers: parsedMsg.systemNotification});
+          break;
+
+        default:
+          throw new Error("Unknown event type " + parsedMsg.type);
       }
+
+
+
+
+
+
+
+      // if (parsedMsg.type === "new message") {
+      //   const messages = this.state.messages.concat(parsedMsg.message);
+      //   this.setState({
+      //     messages: messages,
+      //     systemNotification: parsedMsg.systemNotification,
+      //     currentUser: parsedMsg.username
+      //   });
+
+      // } else if (parsedMsg.type === "user change") {
+      //   this.setState({
+      //     systemNotification: parsedMsg.systemNotification,
+      //     currentUser: parsedMsg.username
+      //   });
+
+      // } else if (parsedMsg.type === "update online users") {
+      //   this.setState({onlineUsers: parsedMsg.systemNotification});
+      // }
     }
   }
 
