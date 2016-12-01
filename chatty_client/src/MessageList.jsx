@@ -15,7 +15,7 @@ class MessageList extends Component {
           })
         }
         <div className="message system">
-          -------- message system status to be filled later on in the project ---------
+          {this.props.systemNotification}
         </div>
       </div>
     );

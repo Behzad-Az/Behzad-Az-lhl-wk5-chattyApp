@@ -9,7 +9,7 @@ const colorArr = ["FF1053", "#F9C80E", "#F86624", "#43BCCD", "#662E9B",
 
 //"#00C8F8", "#FFC33C", "#EF9950", "#FBE2B4", "#59C4C5"
 let data = {
-  // currentUser: {name: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
+  currentUser: {name: "Anonymous"},
   userCount: 2,
   socket: new WebSocket("ws://localhost:4000"),
   messages: [
@@ -26,79 +26,73 @@ let data = {
     //   fontColor: {color: colorArr[1 % colorArr.length]}
     // }
   ],
-  notification: ""
+  navBarNotification: "",
+  systemNotification: ""
 };
-
 
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    //this.state = Object.assign(data, {currentUser: {name: this.props.username || "Anonymous"}});
     this.state = data;
     this.addMessage = this.addMessage.bind(this);
+    this.userChanged = this.userChanged.bind(this);
   }
 
   componentDidMount() {
 
-    //var message = "the champ is here..";
-
     this.state.socket.onopen = (event) => {
       console.log("Connected to server...");
-
-      // You can start sending messages.
-      // Tell the server this user's username
-      // var message = { type: 'set_name', username: "username"}
-      // // convert the message to a JSON string and send it over
-      // this.state.socket.send(JSON.stringify(message))
     }
 
     this.state.socket.onmessage = (event) => {
-      let newMessage = JSON.parse(event.data);
-      const messages = this.state.messages.concat(newMessage);
-      this.setState({messages: messages});
+      let parsedMsg = JSON.parse(event.data);
+
+      if (parsedMsg.type === "new message") {
+        const messages = this.state.messages.concat(parsedMsg);
+        this.setState({messages: messages});
+
+      } else if (parsedMsg.type === "user change") {
+        // let systemNotification = `${this.state.currentUser.name} ${parsedMsg.content}`;
+        // this.setState({systemNotification: systemNotification, currentUser: {name: parsedMsg.username || "Anonymous"}});
+        this.setState({
+          systemNotification: parsedMsg.content,
+          currentUser: parsedMsg.username
+        })
+
+
+
+
+
+
+      }
     }
-
-    // socket.onopen = (e) => {
-    //   socket.send(message);
-    // }
-
-    // console.log("componentDidMount <App />");
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   // Add a new message to the list of messages in the data store
-    //   const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   // Update the state of the app component.
-    //   // Calling setState will trigger a call to render() in App and all child components.
-    //   this.setState({messages: messages})
-    // }, 3000);
   }
 
-
+  userChanged(newUser) {
+    console.log("notifying of user change...");
+    const serverMsg = {
+      type: "user change",
+      username: newUser
+    };
+    this.state.socket.send(JSON.stringify(serverMsg));
+  }
 
   addMessage(username, content) {
-
     console.log("Adding message....");
     if (!content) {
-      this.setState({notification: "Please enter a message first"});
-      setTimeout(() => {this.setState({notification: ""})}, 1000);
+      this.setState({navBarNotification: "Please enter a message first"});
+      setTimeout(() => {this.setState({navBarNotification: ""})}, 1000);
     }
-
     else {
-
-      // if (!existingUser) { this.state.userCount += 1; }
-
-      const newMessage = {
+      const serverMsg = {
+        type: "new message",
         id: this.state.messages.length,
         username: username,
         content: content
-        // fontColor: {color: colorArr[colorIndex]}
       };
-
-      this.state.socket.send(JSON.stringify(newMessage));
-
+      this.state.socket.send(JSON.stringify(serverMsg));
     }
   }
 
@@ -106,12 +100,12 @@ class App extends Component {
     return (
       <div>
         <nav id="chattyNavBar">
-          <div className="app-notifications">{this.state.notification}</div>
+          <div className="app-navBarNotifications">{this.state.navBarNotification}</div>
           <h1>Chatty</h1>
         </nav>
         <div className="wrapper">
-          <MessageList messageArr={this.state.messages}/>
-          <ChatBar addMsgFcn={this.addMessage}/>
+          <MessageList messageArr={this.state.messages} systemNotification={this.state.systemNotification}/>
+          <ChatBar addMsgFcn={this.addMessage} userChangedFcn={this.userChanged} username={this.state.currentUser.name} />
         </div>
       </div>
     );

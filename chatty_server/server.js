@@ -31,31 +31,45 @@ wss.on('connection', (ws) => {
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   // ws.on('close', () => console.log('Client disconnected'));
 
-  ws.on('message', (incomingMsg) => {
-    let newMessage = JSON.parse(incomingMsg);
-    let existingUser = false;
-    let colorIndex = userCount % colorArr.length;
-    newMessage.username = newMessage.username || "Anonymous";
+  ws.on('message', (incomingMsg, socket) => {
+    let parsedMsg = JSON.parse(incomingMsg);
 
+    if (parsedMsg.type === "new message") {
+      let existingUser = false;
+      let colorIndex = userCount % colorArr.length;
+      parsedMsg.username = parsedMsg.username || "Anonymous";
 
-    messageArr.forEach((msg) => {
-      if (msg.username === newMessage.username) {
-        existingUser = true;
-        colorIndex = colorArr.indexOf(msg.fontColor.color);
-      }
-    });
+      messageArr.forEach((msg) => {
+        if (msg.username === parsedMsg.username) {
+          existingUser = true;
+          colorIndex = colorArr.indexOf(msg.fontColor.color);
+        }
+      });
 
-    if (!existingUser) { userCount++; }
+      if (!existingUser) { userCount++; }
 
-    newMessage.fontColor = { color: colorArr[colorIndex] };
+      parsedMsg.fontColor = { color: colorArr[colorIndex] };
 
-    messageArr.push(newMessage);
+      messageArr.push(parsedMsg);
 
-    wss.clients.forEach((client) => {
-      client.send(JSON.stringify(newMessage));
-    });
+      wss.clients.forEach((client) => {
+        client.send(JSON.stringify(parsedMsg));
+      });
+
+    } else if (parsedMsg.type === "user change") {
+      let prevUser = ws.username || "Anonymous";
+      let msgToClient = `${prevUser} change name to ${parsedMsg.username}...`;
+      ws.username = parsedMsg.username;
+      let outObj = {
+          type: parsedMsg.type,
+          content: msgToClient,
+          username: {name: ws.username}
+        };
+      wss.clients.forEach((client) => {
+        client.send(JSON.stringify(outObj));
+      });
+    }
+
   });
-
-
 });
 
