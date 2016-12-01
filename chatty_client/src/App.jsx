@@ -7,7 +7,8 @@ let data = {
   socket: new WebSocket("ws://localhost:4000"),
   messages: [],
   navBarNotification: "",
-  systemNotification: ""
+  systemNotification: "",
+  onlineUsers: ""
 };
 
 
@@ -18,6 +19,20 @@ class App extends Component {
     this.state = data;
     this.addMessage = this.addMessage.bind(this);
     this.userChanged = this.userChanged.bind(this);
+  }
+
+  scrollDown() {
+    var objDiv = document.getElementById("message-list");
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
+
+  componentDidUpdate() {
+    console.log("ASDASDASDASDASD");
+    var objDiv = document.getElementById("message-list").lastChild;
+    objDiv.scrollIntoView();
+    // var node = objDiv.getDOMNode();
+    // node.scrollTop = node.scrollHeight;
+    // objDiv.scrollTop = objDiv.scrollHeight;
   }
 
   componentDidMount() {
@@ -43,6 +58,8 @@ class App extends Component {
           currentUser: parsedMsg.username
         });
 
+      } else if (parsedMsg.type === "update online users") {
+        this.setState({onlineUsers: parsedMsg.systemNotification});
       }
     }
   }
@@ -79,6 +96,8 @@ class App extends Component {
         <nav id="chattyNavBar">
           <div className="app-navBarNotifications">{this.state.navBarNotification}</div>
           <h1>Chatty</h1>
+          <script>{this.scrollDown}</script>
+          <p>{this.state.onlineUsers}</p>
         </nav>
         <div className="wrapper">
           <MessageList messageArr={this.state.messages} systemNotification={this.state.systemNotification}/>

@@ -38,12 +38,14 @@ function sendToClient(wss, type, sysNotif, newMessage, username) {
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
-  // console.log('Client connected');
+  sendToClient(wss, "update online users", `${wss.clients.length} user(s) online`);
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  // ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    sendToClient(wss, "update online users", `${wss.clients.length} users online`);
+  });
 
-  ws.on('message', (incomingMsg, socket) => {
+  ws.on('message', (incomingMsg) => {
     let parsedMsg = JSON.parse(incomingMsg);
     let prevUser = ws.username || "Anonymous";
     let newUserNotif = "";
