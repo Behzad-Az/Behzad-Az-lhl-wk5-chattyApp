@@ -50,6 +50,22 @@ wss.on('connection', (ws) => {
     let prevUser = ws.username || "Anonymous";
     let newUserNotif = "";
 
+
+    // switch(data.type) {
+    //   case "incomingMessage":
+    //     // handle incoming message
+    //     break;
+    //   case "incomingNotification":
+    //     // handle incoming notification
+    //     break;
+    //   default:
+    //     // show an error in the console if the message type is unknown
+    //     throw new Error("Unknown event type " + data.type);
+    // }
+
+
+
+
     if (parsedMsg.type === "new message") {
       let existingUser = false;
       let colorIndex = userCount % colorArr.length;
@@ -83,4 +99,33 @@ wss.on('connection', (ws) => {
 
   });
 });
+
+
+
+// componentDidMount: function() {
+//   console.log("componentDidMount <App />");
+//   this.socket = new WebSocket("ws://localhost:4000/socketserver");
+
+//   this.socket.onopen = (event) => {
+//     console.log("Connected to server");
+//   };
+
+//   this.socket.onmessage = (event) => {
+//     console.log(event);
+//     // The socket event data is encoded as a JSON string.
+//     // This line turns it into an object
+//     const data = JSON.parse(event.data);
+//     switch(data.type) {
+//       case "incomingMessage":
+//         // handle incoming message
+//         break;
+//       case "incomingNotification":
+//         // handle incoming notification
+//         break;
+//       default:
+//         // show an error in the console if the message type is unknown
+//         throw new Error("Unknown event type " + data.type);
+//     }
+//   };
+// },
 

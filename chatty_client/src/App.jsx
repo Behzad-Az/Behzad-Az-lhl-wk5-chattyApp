@@ -21,18 +21,9 @@ class App extends Component {
     this.userChanged = this.userChanged.bind(this);
   }
 
-  scrollDown() {
-    var objDiv = document.getElementById("message-list");
-    objDiv.scrollTop = objDiv.scrollHeight;
-  }
-
   componentDidUpdate() {
-    console.log("ASDASDASDASDASD");
-    var objDiv = document.getElementById("message-list").lastChild;
-    objDiv.scrollIntoView();
-    // var node = objDiv.getDOMNode();
-    // node.scrollTop = node.scrollHeight;
-    // objDiv.scrollTop = objDiv.scrollHeight;
+    let lastMsgDiv = document.getElementById("message-list").lastChild;
+    lastMsgDiv.scrollIntoView();
   }
 
   componentDidMount() {
@@ -65,7 +56,7 @@ class App extends Component {
   }
 
   userChanged(newUser) {
-    console.log("notifying of user change...");
+    // console.log("notifying of user change...");
     const serverMsg = {
       type: "user change",
       username: newUser
@@ -74,7 +65,7 @@ class App extends Component {
   }
 
   addMessage(username, content) {
-    console.log("Adding message....");
+    // console.log("Adding message....");
     if (!content) {
       this.setState({navBarNotification: "Please enter a message first"});
       setTimeout(() => {this.setState({navBarNotification: ""})}, 1000);
