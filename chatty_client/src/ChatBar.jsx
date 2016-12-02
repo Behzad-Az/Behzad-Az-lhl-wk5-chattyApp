@@ -41,7 +41,6 @@ class ChatBar extends Component {
   }
 
   render() {
-    // console.log("componentDidMount <ChatBar />");
     return (
       <footer>
         <input id="username" type="text" placeholder="Your Name (Optional)" onChange={this.handleNameChange} />

@@ -12,7 +12,6 @@ let data = {
 };
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = data;
@@ -26,7 +25,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-
     this.state.socket.onopen = (event) => {
       console.log("Connected to server...");
     }
@@ -34,10 +32,7 @@ class App extends Component {
     this.state.socket.onmessage = (event) => {
       let parsedMsg = JSON.parse(event.data);
 
-
-
       switch(parsedMsg.type) {
-
         case "new message":
           const messages = this.state.messages.concat(parsedMsg.message);
           this.setState({
@@ -46,18 +41,15 @@ class App extends Component {
             currentUser: parsedMsg.username
           });
           break;
-
         case "user change":
           this.setState({
             systemNotification: parsedMsg.systemNotification,
             currentUser: parsedMsg.username
           });
           break;
-
         case "update online users":
           this.setState({onlineUsers: parsedMsg.systemNotification});
           break;
-
         default:
           throw new Error("Unknown event type " + parsedMsg.type);
       }
@@ -65,7 +57,6 @@ class App extends Component {
   }
 
   userChanged(newUser) {
-    // console.log("notifying of user change...");
     const serverMsg = {
       type: "user change",
       username: newUser
@@ -74,7 +65,6 @@ class App extends Component {
   }
 
   addMessage(username, content) {
-    // console.log("Adding message....");
     if (!content) {
       this.setState({navBarNotification: "Please enter a message first"});
       setTimeout(() => {this.setState({navBarNotification: ""})}, 1000);
