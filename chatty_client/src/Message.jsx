@@ -4,7 +4,6 @@ class Message extends Component {
 
   render () {
     let thisMessage = this.props.message;
-    console.log("componentDidMount <Message />");
     let regEx = /(http|https?:\/\/[^\s]+)(.png|.jpg|.gif)/g;
     let msgUrl = thisMessage.content.match(regEx);
     let msgTxt = thisMessage.content.replace(msgUrl, "");

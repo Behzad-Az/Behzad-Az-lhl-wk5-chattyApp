@@ -60,21 +60,31 @@ nav {
       word-wrap: break-word;
       display: inline-block;
       padding: 4px 0;
-    }
 
-    .content p {
-      display: inline-block;
-      word-wrap: break-word;
-      max-width: 100%;
-      padding: 10px 5px;
-      background-color: $textbgColor;
-      max-width: 90%;
-    }
+      .arrow-left {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid $textbgColor;
+      }
 
-    .picture {
-      margin-top: 5px;
-      width: 60%;
-      display: block;
+      p {
+        display: inline-block;
+        word-wrap: break-word;
+        max-width: 100%;
+        padding: 10px 5px;
+        background-color: $textbgColor;
+        max-width: 90%;
+      }
+
+      .picture {
+        margin-top: 5px;
+        width: 60%;
+        display: block;
+      }
     }
 
     .system {
@@ -99,14 +109,4 @@ footer {
 
   #username { flex: 3; }
   #new-message { flex: 7; }
-}
-
-.arrow-left {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-right: 8px solid $textbgColor;
 }
