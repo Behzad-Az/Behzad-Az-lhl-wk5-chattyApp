@@ -12,22 +12,22 @@ class ChatBar extends Component {
   }
 
   componentDidMount() {
-    document.querySelector('#new-message').addEventListener('keypress', function (event) {
+    document.querySelector('#new-message').addEventListener('keypress', (event) => {
       let key = event.which || event.keyCode;
       if (key === 13) {
         this.props.addMsgFcn(this.state.currUsername, this.state.currMessage);
         this.setState({currMessage: ""});
       }
-    }.bind(this));
+    });
 
-    document.querySelector('#username').addEventListener('keypress', function (event) {
+    document.querySelector('#username').addEventListener('keypress', (event) => {
       let key = event.which || event.keyCode;
       if (key === 13) {
         if (this.state.currUsername) {
           this.props.userChangedFcn(this.state.currUsername);
         }
       }
-    }.bind(this));
+    });
   }
 
   handleMsgChange(event) {

@@ -17,6 +17,5 @@ class MessageList extends Component {
       </div>
     );
   }
-
 }
 export default MessageList;

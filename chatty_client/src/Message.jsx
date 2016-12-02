@@ -13,11 +13,11 @@ class Message extends Component {
         <div className="message">
           <span className="username" style={thisMessage.fontColor}>{thisMessage.username}</span>
           <span className="content">
+            <div className="arrow-left"></div>
             <p>{msgTxt}</p>
             <img className="picture" src={msgUrl}/>
           </span>
         </div>
-
     );
   }
 }
